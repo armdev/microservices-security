@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
 
 /**
  *
@@ -17,7 +17,6 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 @ToString
 @EqualsAndHashCode
 @AllArgsConstructor
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class Claim implements Serializable{
     
     private String iss;
