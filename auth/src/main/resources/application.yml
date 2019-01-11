@@ -1,0 +1,32 @@
+management:
+  security:  
+   enabled: false      
+  endpoint:
+    health:
+      enabled: true
+      show-details: always
+  endpoints:
+    jmx:
+      exposure:
+       include: '*'
+    web:
+     exposure:
+      include: '*'
+      base-path: /actuator
+    cors:
+      allowed-origins: 'true'
+      enabled-by-default: 'false'
+    
+server:
+    port: 5001
+    
+spring:
+  application:
+    name: auth
+     
+
+jwt:
+    header: Authorization
+    expires_in: 864000 
+    mobile_expires_in: 864000   
+    secret: supersecret2019
