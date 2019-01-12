@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,7 +33,12 @@ public class LoginController {
 
     @PostMapping(path = "/login", produces = "application/json;charset=UTF-8")
     @CrossOrigin
-    public ResponseEntity<?> login(@RequestBody Login login) {
+    public ResponseEntity<?> login(@RequestBody Login login, @RequestHeader(value = "zuul-token", required = true) String zuulToken) {
+
+        Boolean validateToken = tokenProvider.validateToken(zuulToken);
+        if (!validateToken) {
+            return ResponseEntity.badRequest().body(new ResponseMessage("Zuul Token is not valid"));
+        }
 
         Optional<User> loggedUser = userService.login(login);
 

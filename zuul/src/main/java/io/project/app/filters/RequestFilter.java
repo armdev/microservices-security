@@ -60,6 +60,13 @@ public class RequestFilter extends ZuulFilter {
         if (!ctx.getRequest().getMethod().equalsIgnoreCase("OPTIONS")) {
             log.info("Request method " + ctx.getRequest().getMethod());
 
+            if (ctx.getRequest().getRequestURI().contains("auth")
+                    || ctx.getRequest().getRequestURI().contains("register")) {
+                log.info("Processing incoming request for {}.", ctx.getRequest().getRequestURI());
+                ctx.getResponse().addHeader(FilterUtils.ZUUL_TOKEN, tokenProvider.generateToken("zuul-token", new Device(true, false, false)));
+                ctx.addZuulRequestHeader(FilterUtils.ZUUL_TOKEN, tokenProvider.generateToken("zuul-token", new Device(true, false, false)));
+            }
+
             if (!ctx.getRequest().getRequestURI().contains("auth")
                     && !ctx.getRequest().getRequestURI().contains("register")) {
 

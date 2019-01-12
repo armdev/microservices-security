@@ -150,11 +150,9 @@ services:
         delay: 5s
         max_attempts: 3
         window: 120s
-    links:      
-      - mongonode 
+    links:     
       - eureka
-    depends_on:     
-      - mongonode
+    depends_on:      
       - eureka     
     ports:
       - '5002:5002'
