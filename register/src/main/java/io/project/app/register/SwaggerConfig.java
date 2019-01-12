@@ -32,7 +32,7 @@ public class SwaggerConfig {
     @Bean
     public Docket personApi() {
         return new Docket(DocumentationType.SWAGGER_2).enable(true)
-                .groupName("Auth API")
+                .groupName("Register API")
                 .apiInfo(apiInfo())
                 .select()
                 .paths(regex("/api.*"))

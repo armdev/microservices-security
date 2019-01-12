@@ -4,7 +4,6 @@ import io.project.app.domain.User;
 import io.project.app.dto.Login;
 import io.project.app.dto.ResponseMessage;
 import io.project.app.security.Device;
-import io.project.app.security.TimeProvider;
 import io.project.app.security.TokenProvider;
 import io.project.app.services.UserService;
 import java.util.Optional;
