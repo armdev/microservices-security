@@ -1,9 +1,13 @@
 package io.project.app.resources;
 
+import io.project.app.domain.User;
 import io.project.app.dto.Login;
+import io.project.app.dto.ResponseMessage;
 import io.project.app.security.Device;
 import io.project.app.security.TimeProvider;
 import io.project.app.security.TokenProvider;
+import io.project.app.services.UserService;
+import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v2/tokens")
+@RequestMapping("/api/v2/users")
 @Slf4j
 public class LoginController {
 
@@ -25,26 +29,28 @@ public class LoginController {
     private TokenProvider tokenProvider;
 
     @Autowired
-    private TimeProvider timeProvider;
+    private UserService userService;
 
     @PostMapping(path = "/login", produces = "application/json;charset=UTF-8")
     @CrossOrigin
     public ResponseEntity<?> login(@RequestBody Login login) {
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("MP-AUTH-TOKEN", this.generate());
-        headers.add("Authorization", this.generate());
+        Optional<User> loggedUser = userService.login(login);
 
-        return ResponseEntity.ok().headers(headers).body("some user model");
+        if (loggedUser.isPresent()) {
+            HttpHeaders headers = new HttpHeaders();
+            final Device device = new Device(true, false, false);
+            headers.add("AUTH-TOKEN", tokenProvider.generateToken(loggedUser.get().getEmail(), device));
+            headers.add("Authorization", tokenProvider.generateToken(loggedUser.get().getEmail(), device));
+            return ResponseEntity.ok().headers(headers).body("User is logged");
+        }
 
-    }
+        if (!loggedUser.isPresent()) {
+            return ResponseEntity.badRequest().body(new ResponseMessage("User does not exist"));
+        }
 
-    public String generate() {
-        log.info("generate test token");
-        final Device device = new Device(true, false, false);
-        String generateToken = tokenProvider.generateToken("a@gmail.com", device);
-        log.info("Token is accepted and refreshed");
-        return generateToken;
+        return ResponseEntity.notFound().build();
+
     }
 
 }

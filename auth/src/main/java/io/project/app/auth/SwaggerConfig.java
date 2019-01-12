@@ -20,7 +20,7 @@ public class SwaggerConfig {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("Auth API")
-                .description("User login")
+                .description("From Zero To Hero one step")
                 .termsOfServiceUrl("http://www-03.ibm.com/software/sla/sladb.nsf/sla/bm?Open")
                 .contact("Armen Arzumanyan")
                 .license("Apache License Version 2.0")

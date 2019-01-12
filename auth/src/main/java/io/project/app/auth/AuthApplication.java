@@ -8,12 +8,12 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRepositories;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 @SpringBootApplication
 @ComponentScan(basePackages = {"io.project"})
 @EntityScan("io.project.app.domain")
-@EnableReactiveMongoRepositories("io.project.app.repositories")
+@EnableMongoRepositories("io.project.app.repositories")
 @EnableDiscoveryClient
 @EnableEurekaClient
 public class AuthApplication {

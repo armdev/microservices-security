@@ -1,5 +1,6 @@
 package io.project.app.zuul;
 
+import brave.sampler.Sampler;
 import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
@@ -17,16 +18,21 @@ import org.springframework.web.client.RestTemplate;
 @SpringBootApplication
 public class ZuulApplication {
 
+    public static void main(String[] args) {
+        final SpringApplication application = new SpringApplication(ZuulApplication.class);
+        application.setBannerMode(Banner.Mode.OFF);
+        application.setWebApplicationType(WebApplicationType.SERVLET);
+        application.run(args);
+    }
+
     @LoadBalanced
     @Bean
     public RestTemplate getRestTemplate() {
         return new RestTemplate();
     }
 
-    public static void main(String[] args) {
-        final SpringApplication application = new SpringApplication(ZuulApplication.class);
-        application.setBannerMode(Banner.Mode.OFF);
-        application.setWebApplicationType(WebApplicationType.SERVLET);
-        application.run(args);
+    @Bean
+    public Sampler sampler() {
+        return Sampler.ALWAYS_SAMPLE;
     }
 }

@@ -1,6 +1,69 @@
 version: "3.3"
 
-services:  
+services:
+    
+  rabbitmq:    
+    image: rabbitmq                 
+    container_name: rabbitmq
+    links:
+     - zipkinnode
+    volumes:
+     - /opt/rabbitmq/logs/:/opt/rabbitmq/logs
+    ports:
+     - '15672:15672'
+     - '5672:5672'
+    networks:
+     - marketplacenetwork
+    
+  mongonode:      
+    build: ./mongonode
+    container_name: mongonode    
+    volumes:
+      - /opt/mongobingo/data:/data/db
+      - /opt/mongobingo/logs:/data/logs
+    ports:
+      - 27017:27017
+    restart: always
+    environment:
+      - MONGO_INITDB_ROOT_PASSWORD=Abcdf
+      - MONGO_INITDB_ROOT_USERNAME=BingoBongo
+    command: mongod
+    networks:
+      socnet:
+        aliases:
+          - mongonode
+    
+  mysql:
+    image: mysqlnode
+    build: ./mysqlnode
+    container_name: "mysql"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_USER=admin
+      - MYSQL_PASSWORD=root
+      - MYSQL_DATABASE=zipkin
+    volumes:
+      - /opt/mysql6/logs/:/opt/mysql/logs 
+      - /opt/mysql6/data:/var/lib/mysql    
+    ports:
+      - 3306:3306  
+    networks:
+     - socnet
+     
+       
+  phpmyadmin:
+   image: phpmyadmin/phpmyadmin
+   container_name: "phpmyadmin"
+   links:
+    - mysql
+   ports:
+     - 9191:80
+   environment:
+     MYSQL_USERNAME: root
+     MYSQL_ROOT_PASSWORD: root
+     PMA_HOST: mysqlnode
+   networks:
+     - socnet
 
   eureka:
     image: eureka   
@@ -27,24 +90,22 @@ services:
       - '8079:8079'
     networks:
       - socnet
-
-  mongonode:      
-    build: ./mongonode
-    container_name: mongonode    
+      
+  zipkin:
+    image: zipkin    
+    build: ./zipkin
+    container_name: zipkin
+    links:
+      - eureka
+    depends_on:     
+      - eureka   
     volumes:
-      - /opt/mongobingo/data:/data/db
-      - /opt/mongobingo/logs:/data/logs
+      - /opt/zipkin/logs/:/opt/zipkin/logs     
     ports:
-      - 27017:27017
-    restart: always
-    environment:
-      - MONGO_INITDB_ROOT_PASSWORD=Abcdf
-      - MONGO_INITDB_ROOT_USERNAME=BingoBongo
-    command: mongod
+      - '9411:9411'
     networks:
-      socnet:
-        aliases:
-          - mongonode
+      - socnet
+  
 
   auth:
     image: auth   

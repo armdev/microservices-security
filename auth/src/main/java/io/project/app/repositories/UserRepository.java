@@ -1,10 +1,10 @@
 package io.project.app.repositories;
 
 import io.project.app.domain.User;
-import org.springframework.data.repository.reactive.ReactiveCrudRepository;
+import java.util.Optional;
+import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
-import reactor.core.publisher.Mono;
 
 /**
  *
@@ -13,8 +13,8 @@ import reactor.core.publisher.Mono;
 @Repository
 @Component
 public interface UserRepository
-        extends ReactiveCrudRepository<User, String> {
+        extends MongoRepository<User, String> {
 
-    Mono<User> findByEmailAndPassword(String email, String password);
+    Optional<User> findByEmailAndPassword(String email, String password);
 
 }

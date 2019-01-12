@@ -24,6 +24,22 @@ spring:
   application:
     name: auth
     
+    
+  cloud:
+    discovery:
+       service-id: auth
+       enabled: true
+      
+  zipkin:
+    baseUrl: ${ZIPKIN_URI:http://zipkin:9411}
+    enabled: true
+  sleuth:
+    enabled: true
+    http:
+      enabled: true   
+    sampler:
+    percentage: 1 
+    
   data:
     mongodb:           
       uri: mongodb://BingoBongo:Abcdf@mongonode:27017/userDB?authSource=admin

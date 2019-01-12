@@ -1,0 +1,2 @@
+FROM mysql:6.0.6
+MAINTAINER Armen Arzumanyan
