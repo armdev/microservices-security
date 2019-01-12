@@ -1,0 +1,82 @@
+version: "3.3"
+
+services:  
+
+  eurekanode:
+    image: eurekanode   
+    build: ./eurekanode
+    container_name: eurekanode
+    ports:
+      - '8761:8761'
+    volumes:
+      - /opt/eureka/logs/:/opt/eureka/logs
+    networks:
+      - socnet
+
+
+  zuul:
+    image: zuul    
+    build: ./zuul
+    container_name: zuul
+    links:
+      - eurekanode 
+    volumes:
+      - /opt/zuul/logs/:/opt/zuul/logs     
+    ports:
+      - '8079:8079'
+    networks:
+      - socnet
+
+  mongonode:      
+    build: ./mongonode
+    container_name: mongonode    
+    volumes:
+      - /opt/mongobingo/data:/data/db
+      - /opt/mongobingo/logs:/data/logs
+    ports:
+      - 27017:27017
+    restart: always
+    environment:
+      - MONGO_INITDB_ROOT_PASSWORD=Abcdf
+      - MONGO_INITDB_ROOT_USERNAME=BingoBongo
+    command: mongod
+    networks:
+      socnet:
+        aliases:
+          - mongonode
+
+  auth:
+    image: auth   
+    build: ./auth
+    container_name: auth
+    restart: always
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+    links:      
+      - mongonode 
+      - eurekanode
+    depends_on:     
+      - mongonode
+      - eurekanode     
+    ports:
+      - '4001:4001'
+    volumes:
+      - /opt/auth/logs/:/opt/auth/logs
+    networks:
+      - socnet
+
+
+  
+   
+
+networks:
+  socnet:
+    driver: bridge

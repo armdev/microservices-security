@@ -23,10 +23,14 @@ server:
 spring:
   application:
     name: auth
+    
+  data:
+    mongodb:           
+      uri: mongodb://BingoBongo:Abcdf@mongonode:27017/userDB?authSource=admin
      
 
 jwt:
     header: Authorization
-    expires_in: 864000 
-    mobile_expires_in: 864000   
+    expires_in: 300 
+    mobile_expires_in: 400   
     secret: supersecret2019

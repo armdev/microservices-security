@@ -6,10 +6,12 @@ import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRepositories;
 
 @SpringBootApplication
 @ComponentScan(basePackages = {"io.project"})
 @EntityScan("io.project.app.domain")
+@EnableReactiveMongoRepositories("io.project.app.repositories")
 public class AuthApplication {
 
     

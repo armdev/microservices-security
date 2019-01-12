@@ -1,6 +1,6 @@
 package io.project.app.resources;
 
-import io.project.app.dto.ResponseMessage;
+import io.project.app.dto.Login;
 import io.project.app.security.Device;
 import io.project.app.security.TimeProvider;
 import io.project.app.security.TokenProvider;
@@ -8,11 +8,10 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,7 +29,7 @@ public class LoginController {
 
     @PostMapping(path = "/login", produces = "application/json;charset=UTF-8")
     @CrossOrigin
-    public ResponseEntity<?> login() {
+    public ResponseEntity<?> login(@RequestBody Login login) {
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("MP-AUTH-TOKEN", this.generate());
