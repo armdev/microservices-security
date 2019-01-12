@@ -59,8 +59,10 @@ public class RequestFilter extends ZuulFilter {
         log.info("Request method " + ctx.getRequest().getMethod());
         if (!ctx.getRequest().getMethod().equalsIgnoreCase("OPTIONS")) {
             log.info("Request method " + ctx.getRequest().getMethod());
+
             if (!ctx.getRequest().getRequestURI().contains("auth")
                     && !ctx.getRequest().getRequestURI().contains("register")) {
+
                 if (authToken == null) {
                     log.info("Auth token is null");
                     ctx.setResponseStatusCode(401);
@@ -68,37 +70,37 @@ public class RequestFilter extends ZuulFilter {
                     ctx.setResponseBody("Auth Token does not exist");
                     return null;
                 }
+
+                log.info("Validating token locally");
+                Boolean validateToken = tokenProvider.validateToken(authToken);
+
+                if (!validateToken) {
+                    ctx.setResponseStatusCode(401);
+                    ctx.setSendZuulResponse(false);
+                    ctx.setResponseBody("Auth Token invalid, stop proccessing");
+                    return null;
+                }
+
+                Try<Claim> verifyToken = authService.verifyToken(authToken);
+
+                if (verifyToken.isSuccess()) {
+                    log.info("This can check token which is stored in database");
+                    log.info("*************ZUUL REQUEST  START ********************");
+                    log.info("Processing incoming request for {}.", ctx.getRequest().getRequestURI());
+                    ctx.getResponse().addHeader(FilterUtils.ZUUL_TOKEN, tokenProvider.generateToken("zuul-token", new Device(true, false, false)));
+                    ctx.addZuulRequestHeader(FilterUtils.ZUUL_TOKEN, tokenProvider.generateToken("zuul-token", new Device(true, false, false)));
+                    log.info(String.format("%s request to %s", request.getMethod(), request.getRequestURL().toString()));
+                    log.info("*************ZUUL REQUEST FINISH ********************");
+
+                }
+
+                if (!verifyToken.isSuccess()) {
+                    ctx.setResponseStatusCode(401);
+                    ctx.setSendZuulResponse(false);
+                    ctx.setResponseBody("Auth Token invalid");
+                    return null;
+                }
             }
-        }
-
-        log.info("Validating token locally");
-        Boolean validateToken = tokenProvider.validateToken(authToken);
-
-        if (!validateToken) {
-            ctx.setResponseStatusCode(401);
-            ctx.setSendZuulResponse(false);
-            ctx.setResponseBody("Auth Token invalid,stop proccessing");
-            return null;
-        }
-
-        Try<Claim> verifyToken = authService.verifyToken(authToken);
-        
-        if (verifyToken.isSuccess()) {
-            log.info("This can check token which is stored in database");
-            log.info("*************ZUUL REQUEST  START ********************");
-            log.info("Processing incoming request for {}.", ctx.getRequest().getRequestURI());
-            ctx.getResponse().addHeader(FilterUtils.ZUUL_TOKEN, tokenProvider.generateToken("zuul-token", new Device(true, false, false)));
-            ctx.addZuulRequestHeader(FilterUtils.ZUUL_TOKEN, tokenProvider.generateToken("zuul-token", new Device(true, false, false)));
-            log.info(String.format("%s request to %s", request.getMethod(), request.getRequestURL().toString()));
-            log.info("*************ZUUL REQUEST FINISH ********************");
-
-        }
-
-        if (!verifyToken.isSuccess()) {
-            ctx.setResponseStatusCode(401);
-            ctx.setSendZuulResponse(false);
-            ctx.setResponseBody("Auth Token invalid");
-            return null;
         }
 
         return null;
