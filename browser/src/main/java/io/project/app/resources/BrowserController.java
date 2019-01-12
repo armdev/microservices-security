@@ -24,7 +24,7 @@ public class BrowserController {
     @PostMapping(path = "/register", produces = "application/json;charset=UTF-8")
     @CrossOrigin
     public ResponseEntity<?> registerAndLogin(@RequestBody User user) {
-
+        log.info("STARTING THE REQUEST");
         Integer registeredUserStatus = browserService.userRegistration(user);
 
         if (registeredUserStatus == 200) {

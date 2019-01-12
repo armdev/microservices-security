@@ -15,7 +15,6 @@ import org.apache.http.util.EntityUtils;
 
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.annotation.RequestScope;
 
 /**
  *
@@ -23,13 +22,13 @@ import org.springframework.web.context.annotation.RequestScope;
  */
 @Service
 @Component
-@RequestScope
 @Slf4j
 public class BrowserService {
 
     private final String BASE_URL = "http://zuul:8079/gateway/micro";
 
     public Integer userRegistration(User model) {
+         log.info("BrowserService: UserRegistration start ");
         Integer status = 0;
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
             log.info("BrowserService: UserRegistration ");

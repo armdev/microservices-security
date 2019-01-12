@@ -41,7 +41,8 @@ public class LoginController {
             final Device device = new Device(true, false, false);
             headers.add("AUTH-TOKEN", tokenProvider.generateToken(loggedUser.get().getEmail(), device));
             headers.add("Authorization", tokenProvider.generateToken(loggedUser.get().getEmail(), device));
-            return ResponseEntity.ok().headers(headers).body("User is logged");
+
+            return ResponseEntity.ok().headers(headers).body(loggedUser.get());
         }
 
         if (!loggedUser.isPresent()) {
