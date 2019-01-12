@@ -9,7 +9,9 @@
         <module>eureka</module>
         <module>auth</module>
         <module>zuul</module>
-        <module>zipkin</module>	       	
+        <module>zipkin</module>	
+<module>register</module>
+<module>browser</module>           	
         
     </modules>
     <properties>

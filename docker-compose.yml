@@ -134,6 +134,63 @@ services:
       - /opt/auth/logs/:/opt/auth/logs
     networks:
       - socnet
+      
+  browser:
+    image: browser   
+    build: ./browser
+    container_name: browser
+    restart: always
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+    links:      
+      - mongonode 
+      - eureka
+    depends_on:     
+      - mongonode
+      - eureka     
+    ports:
+      - '5002:5002'
+    volumes:
+      - /opt/browser/logs/:/opt/browser/logs
+    networks:
+      - socnet
+      
+      
+  register:
+    image: register   
+    build: ./register
+    container_name: register
+    restart: always
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+    links:      
+      - mongonode 
+      - eureka
+    depends_on:     
+      - mongonode
+      - eureka     
+    ports:
+      - '5003:5003'
+    volumes:
+      - /opt/register/logs/:/opt/register/logs
+    networks:
+      - socnet
   
    
 

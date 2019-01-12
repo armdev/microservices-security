@@ -9,7 +9,10 @@ zuul:
   routes:
     auth:
       path: /auth/**
-      url: http://auth:5001   
+      url: http://auth:5001 
+    register:
+      path: /register/**
+      url: http://register:5003 
 
 server:
    port: 8079
@@ -42,6 +45,9 @@ spring:
     
 
 auth:
+    ribbon:
+     ReadTimeout: 3000
+register:
     ribbon:
      ReadTimeout: 3000
 

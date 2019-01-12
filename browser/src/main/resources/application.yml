@@ -1,0 +1,65 @@
+management:
+  security:  
+   enabled: false      
+  endpoint:
+    health:
+      enabled: true
+      show-details: always
+  endpoints:
+    jmx:
+      exposure:
+       include: '*'
+    web:
+     exposure:
+      include: '*'
+      base-path: /actuator
+    cors:
+      allowed-origins: 'true'
+      enabled-by-default: 'false'
+    
+server:
+    port: 5002
+    
+spring:
+  application:
+    name: browser
+    
+    
+  cloud:
+    discovery:
+       service-id: browser
+       enabled: true
+      
+  zipkin:
+    baseUrl: ${ZIPKIN_URI:http://zipkin:9411}
+    enabled: true
+  sleuth:
+    enabled: true
+    http:
+      enabled: true   
+    sampler:
+    percentage: 1 
+    
+  data:
+    mongodb:           
+      uri: mongodb://BingoBongo:Abcdf@mongonode:27017/userDB?authSource=admin
+     
+
+jwt:
+    header: Authorization
+    expires_in: 300 
+    mobile_expires_in: 400   
+    secret: supersecret2019
+    
+eureka:
+  instance:  
+    leaseRenewalIntervalInSeconds: 10
+    prefer-ip-address: true
+    leaseExpirationDurationInSeconds: 3
+  client:
+    enabled: true
+    registryFetchIntervalSeconds: 5   
+    healthcheck:
+      enabled: true
+    serviceUrl:
+      defaultZone: ${EUREKA_URI:http://eureka:8761/eureka}
