@@ -6,14 +6,14 @@ services:
     image: rabbitmq                 
     container_name: rabbitmq
     links:
-     - zipkinnode
+     - zipkin
     volumes:
      - /opt/rabbitmq/logs/:/opt/rabbitmq/logs
     ports:
      - '15672:15672'
      - '5672:5672'
     networks:
-     - marketplacenetwork
+     - socnet
     
   mongonode:      
     build: ./mongonode
@@ -43,8 +43,8 @@ services:
       - MYSQL_PASSWORD=root
       - MYSQL_DATABASE=zipkin
     volumes:
-      - /opt/mysql6/logs/:/opt/mysql/logs 
-      - /opt/mysql6/data:/var/lib/mysql    
+      - /opt/mysql8/logs/:/opt/mysql/logs 
+      - /opt/mysql8/data:/var/lib/mysql    
     ports:
       - 3306:3306  
     networks:
@@ -61,7 +61,7 @@ services:
    environment:
      MYSQL_USERNAME: root
      MYSQL_ROOT_PASSWORD: root
-     PMA_HOST: mysqlnode
+     PMA_HOST: mysql
    networks:
      - socnet
 
@@ -96,9 +96,9 @@ services:
     build: ./zipkin
     container_name: zipkin
     links:
-      - eureka
+      - eureka    
     depends_on:     
-      - eureka   
+      - eureka      
     volumes:
       - /opt/zipkin/logs/:/opt/zipkin/logs     
     ports:
@@ -129,7 +129,7 @@ services:
       - mongonode
       - eureka     
     ports:
-      - '4001:4001'
+      - '5001:5001'
     volumes:
       - /opt/auth/logs/:/opt/auth/logs
     networks:

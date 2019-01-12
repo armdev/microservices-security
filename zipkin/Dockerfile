@@ -1,4 +1,4 @@
-FROM openjdk:10-jdk
+FROM openjdk:11-jdk-slim
 ADD target/zipkin.jar app.jar
 VOLUME /tmp
 VOLUME /target

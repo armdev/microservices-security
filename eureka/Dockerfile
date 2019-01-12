@@ -1,4 +1,4 @@
-FROM openjdk:10-jdk
+FROM openjdk:11-jdk-slim
 VOLUME /tmp
 ADD target/eureka.jar /app.jar
 RUN bash -c 'touch /app.jar'
