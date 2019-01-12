@@ -34,3 +34,16 @@ jwt:
     expires_in: 300 
     mobile_expires_in: 400   
     secret: supersecret2019
+    
+eureka:
+  instance:  
+    leaseRenewalIntervalInSeconds: 10
+    prefer-ip-address: true
+    leaseExpirationDurationInSeconds: 3
+  client:
+    enabled: true
+    registryFetchIntervalSeconds: 5   
+    healthcheck:
+      enabled: true
+    serviceUrl:
+      defaultZone: ${EUREKA_URI:http://eureka:8761/eureka}

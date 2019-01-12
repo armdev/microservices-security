@@ -1,0 +1,61 @@
+jwt:
+    header: Authorization
+    expires_in: 300   
+    mobile_expires_in: 300    
+    secret: supersecret2019
+
+zuul:
+  prefix: /gateway/web
+  routes:
+    auth:
+      path: /auth/**
+      url: http://auth:5001   
+
+server:
+   port: 8079
+   
+management:
+  security:  
+    enabled: false    
+
+spring:
+  application:
+    name: zuulweb
+  profiles:
+    active:
+      default
+      
+  cloud:
+    discovery:
+       service-id: zuul
+       enabled: true
+      
+  zipkin:
+    baseUrl: ${ZIPKIN_URI:http://zipkin:9411}
+    enabled: true
+  sleuth:
+    enabled: true
+    http:
+      enabled: true   
+    sampler:
+    percentage: 1 
+    
+
+auth:
+    ribbon:
+     ReadTimeout: 3000
+
+     
+eureka:
+  instance:  
+    leaseRenewalIntervalInSeconds: 10
+    prefer-ip-address: true
+    leaseExpirationDurationInSeconds: 3
+  client:
+    enabled: true
+    registryFetchIntervalSeconds: 5   
+    healthcheck:
+      enabled: true
+    serviceUrl:
+      defaultZone: ${EUREKA_URI:http://eureka:8761/eureka}
+

@@ -2,10 +2,10 @@ version: "3.3"
 
 services:  
 
-  eurekanode:
-    image: eurekanode   
-    build: ./eurekanode
-    container_name: eurekanode
+  eureka:
+    image: eureka   
+    build: ./eureka
+    container_name: eureka
     ports:
       - '8761:8761'
     volumes:
@@ -13,13 +13,14 @@ services:
     networks:
       - socnet
 
-
   zuul:
     image: zuul    
     build: ./zuul
     container_name: zuul
     links:
-      - eurekanode 
+      - eureka
+    depends_on:     
+      - eureka   
     volumes:
       - /opt/zuul/logs/:/opt/zuul/logs     
     ports:
@@ -62,18 +63,16 @@ services:
         window: 120s
     links:      
       - mongonode 
-      - eurekanode
+      - eureka
     depends_on:     
       - mongonode
-      - eurekanode     
+      - eureka     
     ports:
       - '4001:4001'
     volumes:
       - /opt/auth/logs/:/opt/auth/logs
     networks:
       - socnet
-
-
   
    
 
