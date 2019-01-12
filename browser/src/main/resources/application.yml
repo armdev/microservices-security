@@ -39,10 +39,7 @@ spring:
       enabled: true   
     sampler:
     percentage: 1 
-    
-  data:
-    mongodb:           
-      uri: mongodb://BingoBongo:Abcdf@mongonode:27017/userDB?authSource=admin
+
      
 
 jwt:

@@ -16,8 +16,11 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 @EqualsAndHashCode
-public class Login implements Serializable {
+public class User implements Serializable {
 
+    private String id;
+    private String firstname;
+    private String lastname;
     private String email;
     private String password;
 }

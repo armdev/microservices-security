@@ -1,17 +1,12 @@
 package io.project.app.resources;
 
 import io.project.app.domain.User;
-import io.project.app.dto.Login;
 import io.project.app.dto.ResponseMessage;
-import io.project.app.security.Device;
-import io.project.app.security.TimeProvider;
-import io.project.app.security.TokenProvider;
 import io.project.app.services.UserService;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,30 +21,24 @@ import org.springframework.web.bind.annotation.RestController;
 public class LoginController {
 
     @Autowired
-    private TokenProvider tokenProvider;
-
-    @Autowired
     private UserService userService;
 
-    @PostMapping(path = "/login", produces = "application/json;charset=UTF-8")
+    @PostMapping(path = "/register", produces = "application/json;charset=UTF-8")
     @CrossOrigin
-    public ResponseEntity<?> login(@RequestBody Login login) {
+    public ResponseEntity<?> register(@RequestBody User user) {
 
-        Optional<User> loggedUser = userService.login(login);
+        Optional<User> registeredUser = userService.registerNewUser(user);
 
-        if (loggedUser.isPresent()) {
-            HttpHeaders headers = new HttpHeaders();
-            final Device device = new Device(true, false, false);
-            headers.add("AUTH-TOKEN", tokenProvider.generateToken(loggedUser.get().getEmail(), device));
-            headers.add("Authorization", tokenProvider.generateToken(loggedUser.get().getEmail(), device));
-            return ResponseEntity.ok().headers(headers).body("User is logged");
+        if (registeredUser.isPresent()) {
+            log.info("User is registered");
+            return ResponseEntity.ok().body(registeredUser.get().getId());
         }
 
-        if (!loggedUser.isPresent()) {
-            return ResponseEntity.badRequest().body(new ResponseMessage("User does not exist"));
+        if (!registeredUser.isPresent()) {
+            return ResponseEntity.badRequest().body(new ResponseMessage("Could not register user"));
         }
 
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.badRequest().build();
 
     }
 

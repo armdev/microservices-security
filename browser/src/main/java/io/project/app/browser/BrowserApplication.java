@@ -10,13 +10,12 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+
 import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
 @ComponentScan(basePackages = {"io.project"})
 @EntityScan("io.project.app.domain")
-@EnableMongoRepositories("io.project.app.repositories")
 @EnableDiscoveryClient
 @EnableEurekaClient
 public class BrowserApplication {
