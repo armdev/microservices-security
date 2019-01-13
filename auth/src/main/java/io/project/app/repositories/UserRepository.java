@@ -17,4 +17,6 @@ public interface UserRepository
 
     Optional<User> findByEmailAndPassword(String email, String password);
 
+    Optional<User> findByEmail(String email);
+
 }

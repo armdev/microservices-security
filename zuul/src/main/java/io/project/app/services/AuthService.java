@@ -26,7 +26,7 @@ public class AuthService {
 
     @HystrixCommand(fallbackMethod = "verifyTokenBackup")
     public Try<Claim> verifyToken(String token) {
-        log.info("LABEL: verifyToken: with passed token " + token);
+        log.info("LABEL: VerifyToken: with passed token " + token);
         Try<Claim> col = Try.of(() -> restTemplate.getForObject("http://auth/api/v2/tokens/verify/{token}", Claim.class, token));
         if (!col.isSuccess()) {
             log.info("LABEL: Fail " + token);

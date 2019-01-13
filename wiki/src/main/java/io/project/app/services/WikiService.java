@@ -28,7 +28,7 @@ public class WikiService {
     }
 
     public Optional<List<Wiki>> findAll(String userId) {
-        Optional<List<Wiki>> wikiList = wikiRepository.findAllByUserIdByOrderPublishDateDesc(userId);
+        Optional<List<Wiki>> wikiList = wikiRepository.findAllByUserId(userId);
 
         return wikiList;
     }

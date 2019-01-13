@@ -1,4 +1,4 @@
-package io.project.app.domain;
+package io.project.app.dto;
 
 
 import java.io.Serializable;
@@ -9,9 +9,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Document;
+
 
 
 /**
@@ -23,13 +21,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 @ToString
 @EqualsAndHashCode
-@Document(collection = "wiki")
 public class Wiki implements Serializable {
-
-    @Id
-    private String id;
-    @Indexed
-    @NotNull(message = "User id is mandatory")
+    private String id;   
     private String userId;
     private String title;
     private String header;

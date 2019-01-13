@@ -1,6 +1,8 @@
 package io.project.app.browser;
 
 import brave.sampler.Sampler;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
@@ -35,6 +37,11 @@ public class BrowserApplication {
     @Bean
     public Sampler sampler() {
         return Sampler.ALWAYS_SAMPLE;
+    }
+    
+    @Bean
+    public CloseableHttpClient httpClient(){
+         return HttpClients.createDefault();
     }
 
 }

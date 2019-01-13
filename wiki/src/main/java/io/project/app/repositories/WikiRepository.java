@@ -16,7 +16,7 @@ import org.springframework.stereotype.Repository;
 public interface WikiRepository
         extends MongoRepository<Wiki, String> {
 
-    Optional<List<Wiki>> findAllByUserIdByOrderPublishDateDesc(String userId);
+    Optional<List<Wiki>> findAllByUserId(String userId);
     
     Optional<Wiki> findByIdAndUserId(String id, String userId);
 
