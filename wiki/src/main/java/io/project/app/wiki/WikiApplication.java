@@ -30,7 +30,7 @@ public class WikiApplication {
     }
 
     @Bean
-    @LoadBalanced
+    //@LoadBalanced
     public RestTemplate getRestTemplate() {
         return new RestTemplate();
     }
