@@ -10,9 +10,9 @@
         <module>auth</module>
         <module>zuul</module>
         <module>zipkin</module>	
-<module>register</module>
-<module>browser</module>           	
-        
+        <module>register</module>
+        <module>browser</module>
+        <module>wiki</module>        
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

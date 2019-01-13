@@ -12,7 +12,11 @@ zuul:
       url: http://auth:5001 
     register:
       path: /register/**
-      url: http://register:5003 
+      url: http://register:5003
+    wiki:
+      path: /wiki/**
+      url: http://wiki:5004  
+    
 
 server:
    port: 8079

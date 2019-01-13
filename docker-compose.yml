@@ -189,6 +189,35 @@ services:
       - /opt/register/logs/:/opt/register/logs
     networks:
       - socnet
+      
+      
+  wiki:
+    image: wiki   
+    build: ./wiki
+    container_name: wiki
+    restart: always
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+    links:      
+      - mongonode 
+      - eureka
+    depends_on:     
+      - mongonode
+      - eureka     
+    ports:
+      - '5004:5004'
+    volumes:
+      - /opt/wiki/logs/:/opt/wiki/logs
+    networks:
+      - socnet
   
    
 
