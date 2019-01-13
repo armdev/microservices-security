@@ -29,6 +29,8 @@ spring:
     discovery:
        service-id: wiki
        enabled: true
+    inetutils:
+       default-hostname: wiki
       
   zipkin:
     baseUrl: ${ZIPKIN_URI:http://zipkin:9411}
@@ -52,7 +54,8 @@ jwt:
     secret: supersecret2019
     
 eureka:
-  instance:  
+  instance:
+    hostname: wiki  
     leaseRenewalIntervalInSeconds: 10
     prefer-ip-address: true
     leaseExpirationDurationInSeconds: 3

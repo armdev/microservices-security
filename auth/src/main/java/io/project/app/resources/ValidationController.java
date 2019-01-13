@@ -9,7 +9,11 @@ import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.server.ServletServerHttpRequest;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,12 +39,30 @@ public class ValidationController {
             @RequestHeader(value = "x-forwarded-host", required = false) String forwardedHost,
             @RequestHeader(value = "user-agent", required = false) String userAgent,
             @RequestHeader(value = "x-forwarded-prefix", required = false) String forwardedPrefix,
-            @RequestHeader(value = "host", required = false) String host
+            @RequestHeader(value = "host", required = false) String host,
+            ServerHttpRequest serverHttpRequest
     ) {
+
+        log.info("#####HOST " + serverHttpRequest.getHeaders().getHost().toString());
+        log.info("#####getETag " + serverHttpRequest.getHeaders().getETag());
+        log.info("#####getConnection " + serverHttpRequest.getHeaders().getConnection().toString());
+        // log.info("#####getLocation " + serverHttpRequest.getHeaders().getLocation().toString());
+        log.info("#####getPragma " + serverHttpRequest.getHeaders().getPragma());
+
+        log.info("DUMP  " + serverHttpRequest.toString());
+        log.info(" ****************************************** ");
         log.info("x-forwarded-host  " + forwardedHost);
         log.info("userAgent  " + userAgent);
         log.info("forwardedPrefix  " + forwardedPrefix);
         log.info("host  " + host);
+
+        log.info("######getHostName " + serverHttpRequest.getRemoteAddress().getHostName());
+        log.info("######getHostString " + serverHttpRequest.getRemoteAddress().getHostString());
+        log.info("######getCanonicalHostName " + serverHttpRequest.getRemoteAddress().getAddress().getCanonicalHostName());
+        log.info("######getHostAddress " + serverHttpRequest.getRemoteAddress().getAddress().getHostAddress());
+        log.info("######getHostName " + serverHttpRequest.getRemoteAddress().getAddress().getHostName());
+        HttpHeaders headers = serverHttpRequest.getHeaders();
+        log.info("#######headers  " + headers.toString());
 
         Optional<User> loggedUser = userService.findByEmail(email);
 
