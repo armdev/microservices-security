@@ -38,10 +38,19 @@ public class WikiController {
     @CrossOrigin
     public ResponseEntity<?> post(@RequestBody Wiki wiki,
             @RequestHeader(value = "zuul-token", required = true) String zuulToken,
-            @RequestHeader(value = "auth-token", required = true) String authToken) {
+            @RequestHeader(value = "auth-token", required = true) String authToken,
+            @RequestHeader(value = "x-forwarded-host", required = false) String forwardedHost,
+            @RequestHeader(value = "user-agent", required = false) String userAgent,
+            @RequestHeader(value = "x-forwarded-prefix", required = false) String forwardedPrefix,
+            @RequestHeader(value = "host", required = false) String host
+    ) {
 
-        log.info("Zuul Token " + zuulToken);
+        log.info("x-forwarded-host  " + forwardedHost);
+        log.info("userAgent  " + userAgent);
+        log.info("forwardedPrefix  " + forwardedPrefix);
+        log.info("host  " + host);
 
+        //  log.info("Zuul Token " + zuulToken);
         Boolean authTokenValidation = tokenProvider.validateToken(authToken);
 
         if (!authTokenValidation) {

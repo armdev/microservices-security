@@ -1,7 +1,6 @@
 package io.project.app.resources;
 
 import io.project.app.domain.User;
-import io.project.app.dto.Login;
 import io.project.app.dto.ResponseMessage;
 import io.project.app.security.Device;
 import io.project.app.security.TokenProvider;
@@ -10,13 +9,10 @@ import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,19 +32,21 @@ public class ValidationController {
     @GetMapping(path = "/verify/user/{email}", produces = "application/json;charset=UTF-8")
     @CrossOrigin
     public ResponseEntity<?> get(@PathVariable(name = "email", required = true) String email,
-            @RequestHeader(value = "micro-token", required = false) String microToken) {
-
-//        Boolean validateToken = tokenProvider.validateToken(microToken);
-//
-//        if (!validateToken) {
-//            return ResponseEntity.badRequest().body(new ResponseMessage("Micro Token is not valid"));
-//        }
+            @RequestHeader(value = "x-forwarded-host", required = false) String forwardedHost,
+            @RequestHeader(value = "user-agent", required = false) String userAgent,
+            @RequestHeader(value = "x-forwarded-prefix", required = false) String forwardedPrefix,
+            @RequestHeader(value = "host", required = false) String host
+    ) {
+        log.info("x-forwarded-host  " + forwardedHost);
+        log.info("userAgent  " + userAgent);
+        log.info("forwardedPrefix  " + forwardedPrefix);
+        log.info("host  " + host);
 
         Optional<User> loggedUser = userService.findByEmail(email);
 
         if (loggedUser.isPresent()) {
-            
-            log.info("USER IS PRESENT, lets generate new token for him");
+
+            log.info("Verify:::: USER IS PRESENT, lets generate new token for him");
 
             final Device device = new Device(true, false, false);
 
@@ -56,7 +54,7 @@ public class ValidationController {
         }
 
         if (!loggedUser.isPresent()) {
-            log.error("User is not present");
+            log.error("Verify User is not present");
             return ResponseEntity.badRequest().body(new ResponseMessage("User does not exist"));
         }
 
