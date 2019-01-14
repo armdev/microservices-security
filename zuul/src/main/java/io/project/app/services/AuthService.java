@@ -29,8 +29,12 @@ public class AuthService {
         log.info("LABEL: VerifyToken: with passed token " + token);
         Try<Claim> col = Try.of(() -> restTemplate.getForObject("http://auth/api/v2/tokens/verify/{token}", Claim.class, token));
         if (!col.isSuccess()) {
-            log.info("LABEL: Fail " + token);
+            log.error("LABEL: Fail " + token);
             return Try.failure(col.getCause());
+        }
+         if (col.isSuccess()) {
+            log.info("TOKEN CHECK IS  SUCCESS ");
+           
         }
         return col;
     }

@@ -21,19 +21,23 @@ public class AuthService {
     @Autowired
     private RestTemplate restTemplate;
 
+    @Autowired
+    private EurekaClient discoveryClient;
+
     public Try<String> verifyUser(String email) {
         log.info("LABEL: verifyUser: email " + email);
         String homePage = this.serviceUrl("auth");
         Try<String> col = Try.of(() -> restTemplate.getForObject(homePage + "api/v2/validation/verify/user/{email}", String.class, email));
         if (!col.isSuccess()) {
-            log.info("LABEL: verifyUser Fail " + email);
+            log.error("LABEL: verifyUser Fail " + email);
             return Try.failure(col.getCause());
+        }
+
+        if (col.isSuccess()) {
+            log.info("LABEL: verifyUser SUCCESS FOR  " + email);
         }
         return col;
     }
-
-    @Autowired
-    private EurekaClient discoveryClient;
 
     public String serviceUrl(String service) {
         InstanceInfo instance = discoveryClient.getNextServerFromEureka(service, false);

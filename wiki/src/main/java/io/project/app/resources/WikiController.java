@@ -66,9 +66,14 @@ public class WikiController {
         Claims allClaimsFromToken = tokenProvider.getAllClaimsFromToken(authToken);
         if (allClaimsFromToken != null && allClaimsFromToken.getSubject() != null) {
             Try<String> verifyUser = authService.verifyUser(allClaimsFromToken.getSubject());
+            
+            if (verifyUser.isSuccess()) {
+                log.info("SUCCESS: User verify by email is Valid");
+               
+            }
 
             if (verifyUser.isFailure()) {
-                log.info("User verify by email is failed");
+                log.error("User verify by email is failed");
                 return ResponseEntity.badRequest().body(new ResponseMessage("Could not add wiki"));
             }
 
