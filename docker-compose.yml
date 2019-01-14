@@ -83,6 +83,8 @@ services:
     image: eureka   
     build: ./eureka
     container_name: eureka
+    links:
+      - redis
     ports:
       - '8761:8761'
     volumes:

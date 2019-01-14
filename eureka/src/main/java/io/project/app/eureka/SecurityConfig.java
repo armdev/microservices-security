@@ -9,15 +9,21 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
 @Order(1)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+// https://spring.io/blog/2017/11/01/spring-security-5-0-0-rc1-released#password-encoding
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication().withUser("mpOwner").password("mpO@wnLer4@07!7").roles("SYSTEM");
+        auth
+	.inMemoryAuthentication()
+		.passwordEncoder(NoOpPasswordEncoder.getInstance())
+		.withUser("mpOwner").password("mp19181975Secret").roles("SYSTEM");
+       // auth.inMemoryAuthentication().withUser("mpOwner").password("mp19181975Secret").roles("SYSTEM");
     }
 
     @Override

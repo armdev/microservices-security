@@ -1,8 +1,13 @@
 management:
   security:  
-    enabled: false  
+    enabled: true
     
 spring:
+#  security:
+#      user:
+#        name: mpOwner
+#        password: mp19181975Secret
+#        roles: SYSTEM
   application:
     name: eureka
 
@@ -22,6 +27,6 @@ eureka:
     healthcheck:
       enabled: true
     serviceUrl:
-      defaultZone: ${EUREKA_URI:http://eureka:8761/eureka}  
+      defaultZone: http://mpOwner:mp19181975Secret@eureka:8761/eureka
 
   

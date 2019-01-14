@@ -62,4 +62,4 @@ eureka:
     healthcheck:
       enabled: true
     serviceUrl:
-      defaultZone: ${EUREKA_URI:http://mpOwner:mpO@wnLer4@07!7@eureka:8761/eureka/}
+      defaultZone: http://mpOwner:mp19181975Secret@eureka:8761/eureka
