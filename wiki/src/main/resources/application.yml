@@ -60,6 +60,7 @@ eureka:
     prefer-ip-address: true
     leaseExpirationDurationInSeconds: 3
   client:
+    hostname: wiki   
     enabled: true
     registryFetchIntervalSeconds: 5   
     healthcheck:
