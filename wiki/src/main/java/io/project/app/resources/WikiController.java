@@ -3,7 +3,8 @@ package io.project.app.resources;
 import io.jsonwebtoken.Claims;
 import io.project.app.domain.Wiki;
 import io.project.app.dto.ResponseMessage;
-import io.project.app.security.TokenProvider;
+import io.project.app.security.AuthTokenProvider;
+import io.project.app.security.ZuulTokenValidator;
 import io.project.app.services.AuthService;
 import io.project.app.services.WikiService;
 import io.vavr.control.Try;
@@ -26,7 +27,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class WikiController {
 
     @Autowired
-    private TokenProvider tokenProvider;
+    private AuthTokenProvider tokenProvider;
+
+    @Autowired
+    private ZuulTokenValidator zuulTokenValidator;
 
     @Autowired
     private WikiService userService;
@@ -57,7 +61,7 @@ public class WikiController {
             return ResponseEntity.badRequest().body(new ResponseMessage("Auth Token is not valid"));
         }
 
-        Boolean validateToken = tokenProvider.validateToken(zuulToken);
+        Boolean validateToken = zuulTokenValidator.validateToken(zuulToken);
 
         if (!validateToken) {
             return ResponseEntity.badRequest().body(new ResponseMessage("Zuul Token is not valid"));
@@ -66,10 +70,10 @@ public class WikiController {
         Claims allClaimsFromToken = tokenProvider.getAllClaimsFromToken(authToken);
         if (allClaimsFromToken != null && allClaimsFromToken.getSubject() != null) {
             Try<String> verifyUser = authService.verifyUser(allClaimsFromToken.getSubject());
-            
+
             if (verifyUser.isSuccess()) {
                 log.info("SUCCESS: User verify by email is Valid");
-               
+
             }
 
             if (verifyUser.isFailure()) {

@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 @Service
 @Component
 @Slf4j
-public class TokenProvider {
+public class ZuulTokenValidator {
 
     @Autowired
     private TimeProvider timeProvider;
@@ -27,8 +27,8 @@ public class TokenProvider {
     @Value("${spring.application.name}")
     private String applicationName;
 
-    @Value("${jwt.secret}")
-    public String applicationSecret;
+    @Value("${jwt.zuulSecret}")
+    public String zuulSecret;
 
     @Value("${jwt.expires_in}")
     private int expiresIn;
@@ -99,7 +99,7 @@ public class TokenProvider {
             refreshedToken = Jwts.builder()
                     .setClaims(claims)
                     .setExpiration(generateExpirationDate(device))
-                    .signWith(SIGNATURE_ALGORITHM, applicationSecret)
+                    .signWith(SIGNATURE_ALGORITHM, zuulSecret)
                     .compact();
         } catch (Exception e) {
             refreshedToken = null;
@@ -116,7 +116,7 @@ public class TokenProvider {
                 .setAudience(audience)
                 .setIssuedAt(timeProvider.now())
                 .setExpiration(generateExpirationDate(device))
-                .signWith(SIGNATURE_ALGORITHM, applicationSecret)
+                .signWith(SIGNATURE_ALGORITHM, zuulSecret)
                 .compact();
     }
 
@@ -136,7 +136,7 @@ public class TokenProvider {
         Claims claims;
         try {
             claims = Jwts.parser()
-                    .setSigningKey(applicationSecret)
+                    .setSigningKey(zuulSecret)
                     .parseClaimsJws(token)
                     .getBody();
         } catch (ExpiredJwtException | MalformedJwtException | SignatureException | UnsupportedJwtException | IllegalArgumentException e) {
@@ -158,7 +158,13 @@ public class TokenProvider {
     public Boolean validateToken(String token) {
 
         final String username = getUsernameFromToken(token);
+
         if (username == null) {
+            return false;
+        }
+        
+        if (!username.equalsIgnoreCase("zuultoken")) {
+            log.error("this is not zuul token " + username);
             return false;
         }
 

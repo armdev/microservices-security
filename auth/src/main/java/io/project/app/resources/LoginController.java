@@ -4,7 +4,8 @@ import io.project.app.domain.User;
 import io.project.app.dto.Login;
 import io.project.app.dto.ResponseMessage;
 import io.project.app.security.Device;
-import io.project.app.security.TokenProvider;
+import io.project.app.security.AuthTokenProvider;
+import io.project.app.security.ZuulTokenValidator;
 import io.project.app.services.UserService;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +27,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class LoginController {
 
     @Autowired
-    private TokenProvider tokenProvider;
+    private AuthTokenProvider tokenProvider;
+    
+    @Autowired
+    private ZuulTokenValidator zuulTokenValidator;
 
     @Autowired
     private UserService userService;
@@ -35,7 +39,7 @@ public class LoginController {
     @CrossOrigin
     public ResponseEntity<?> login(@RequestBody Login login, @RequestHeader(value = "zuul-token", required = true) String zuulToken) {
 
-        Boolean validateToken = tokenProvider.validateToken(zuulToken);
+        Boolean validateToken = zuulTokenValidator.validateToken(zuulToken);
         if (!validateToken) {
             return ResponseEntity.badRequest().body(new ResponseMessage("Zuul Token is not valid"));
         }
@@ -47,14 +51,11 @@ public class LoginController {
             final Device device = new Device(true, false, false);
             headers.add("AUTH-TOKEN", tokenProvider.generateToken(loggedUser.get().getEmail(), device));
             headers.add("Authorization", tokenProvider.generateToken(loggedUser.get().getEmail(), device));
-
             return ResponseEntity.ok().headers(headers).body(loggedUser.get());
         }
-
         if (!loggedUser.isPresent()) {
             return ResponseEntity.badRequest().body(new ResponseMessage("User does not exist"));
         }
-
         return ResponseEntity.notFound().build();
 
     }

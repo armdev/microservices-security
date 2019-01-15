@@ -2,7 +2,8 @@ jwt:
     header: Authorization
     expires_in: 300   
     mobile_expires_in: 300    
-    secret: supersecret2019   
+    secret: supersecret2019
+    zuulSecret: zuulSecret2025
 
 zuul:
   prefix: /gateway/micro

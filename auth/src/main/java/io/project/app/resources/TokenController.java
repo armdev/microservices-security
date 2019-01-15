@@ -3,7 +3,7 @@ package io.project.app.resources;
 import io.project.app.dto.ResponseMessage;
 import io.project.app.security.Device;
 import io.project.app.security.TimeProvider;
-import io.project.app.security.TokenProvider;
+import io.project.app.security.AuthTokenProvider;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class TokenController {
 
     @Autowired
-    private TokenProvider tokenProvider;
+    private AuthTokenProvider tokenProvider;
 
     @Autowired
     private TimeProvider timeProvider;

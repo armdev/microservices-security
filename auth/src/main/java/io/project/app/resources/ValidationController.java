@@ -3,7 +3,7 @@ package io.project.app.resources;
 import io.project.app.domain.User;
 import io.project.app.dto.ResponseMessage;
 import io.project.app.security.Device;
-import io.project.app.security.TokenProvider;
+import io.project.app.security.AuthTokenProvider;
 import io.project.app.services.UserService;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ValidationController {
 
     @Autowired
-    private TokenProvider tokenProvider;
+    private AuthTokenProvider tokenProvider;
 
     @Autowired
     private UserService userService;

@@ -22,8 +22,7 @@ server:
     
 spring:
   application:
-    name: wiki
-    
+    name: wiki    
     
   cloud:
     discovery:
@@ -52,6 +51,7 @@ jwt:
     expires_in: 300 
     mobile_expires_in: 400   
     secret: supersecret2019
+    zuulSecret: zuulSecret2025
     
 eureka:
   instance:

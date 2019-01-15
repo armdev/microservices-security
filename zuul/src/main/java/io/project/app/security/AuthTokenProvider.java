@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 @Service
 @Component
 @Slf4j
-public class TokenProvider {
+public class AuthTokenProvider {
 
     @Autowired
     private TimeProvider timeProvider;

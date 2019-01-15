@@ -4,7 +4,8 @@ import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import io.project.app.dto.Claim;
 import io.project.app.security.Device;
-import io.project.app.security.TokenProvider;
+import io.project.app.security.AuthTokenProvider;
+import io.project.app.security.ZuulTokenProvider;
 import io.project.app.services.AuthService;
 import io.vavr.control.Try;
 
@@ -22,7 +23,10 @@ public class RequestFilter extends ZuulFilter {
     private RestTemplate restTemplate;
 
     @Autowired
-    private TokenProvider tokenProvider;
+    private AuthTokenProvider tokenProvider;
+
+    @Autowired
+    private ZuulTokenProvider zuulTokenProvider;
 
     @Autowired
     private AuthService authService;
@@ -63,8 +67,8 @@ public class RequestFilter extends ZuulFilter {
             if (ctx.getRequest().getRequestURI().contains("auth")
                     || ctx.getRequest().getRequestURI().contains("register")) {
                 log.info("Processing incoming request for {}.", ctx.getRequest().getRequestURI());
-                ctx.getResponse().addHeader(FilterUtils.ZUUL_TOKEN, tokenProvider.generateToken("zuul-token", new Device(true, false, false)));
-                ctx.addZuulRequestHeader(FilterUtils.ZUUL_TOKEN, tokenProvider.generateToken("zuul-token", new Device(true, false, false)));
+                ctx.getResponse().addHeader(FilterUtils.ZUUL_TOKEN, zuulTokenProvider.generateToken("zuultoken", new Device(true, false, false)));
+                ctx.addZuulRequestHeader(FilterUtils.ZUUL_TOKEN, zuulTokenProvider.generateToken("zuultoken", new Device(true, false, false)));
             }
 
             if (!ctx.getRequest().getRequestURI().contains("auth")
@@ -94,11 +98,10 @@ public class RequestFilter extends ZuulFilter {
                     log.info("This can check token which is stored in database");
                     log.info("*************ZUUL REQUEST  START ********************");
                     log.info("Processing incoming request for {}.", ctx.getRequest().getRequestURI());
-                    ctx.getResponse().addHeader(FilterUtils.ZUUL_TOKEN, tokenProvider.generateToken("zuul-token", new Device(true, false, false)));
-                    ctx.addZuulRequestHeader(FilterUtils.ZUUL_TOKEN, tokenProvider.generateToken("zuul-token", new Device(true, false, false)));
+                    ctx.getResponse().addHeader(FilterUtils.ZUUL_TOKEN, zuulTokenProvider.generateToken("zuultoken", new Device(true, false, false)));
+                    ctx.addZuulRequestHeader(FilterUtils.ZUUL_TOKEN, zuulTokenProvider.generateToken("zuultoken", new Device(true, false, false)));
                     log.info(String.format("%s request to %s", request.getMethod(), request.getRequestURL().toString()));
                     log.info("*************ZUUL REQUEST FINISH ********************");
-
                 }
 
                 if (!verifyToken.isSuccess()) {
