@@ -14,20 +14,6 @@ services:
      - '5672:5672'
     networks:
      - socnet
-     
-  redis:
-    image: 'bitnami/redis:latest'
-    environment:
-      - ALLOW_EMPTY_PASSWORD=yes
-      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
-    labels:
-      kompose.service.type: nodeport
-    ports:
-      - '6379:6379'
-    volumes:      
-      - /opt/redis/:/bitnami/redis
-    networks:
-      - socnet 
     
   mongonode:      
     build: ./mongonode
