@@ -14,11 +14,18 @@ public class SecurityWebFilter implements WebFilter {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
-        log.info("SecurityWebFilter FILTER STARTED");
-        if (!exchange.getRequest().getHeaders().containsKey("AUTH-TOKEN")) {
-            log.error("RETURN BAD REQUEST");
+        //log.info("SecurityWebFilter FILTER STARTED");
+        boolean containsKey = exchange.getRequest().getHeaders().containsKey("AUTH-TOKEN");
+        log.info("containsKey ? " + containsKey);
+
+        if (!exchange.getRequest().getQueryParams().containsKey("soccer")) {
+            log.error("RETURN UNAUTHORIZED, NO SOCCER ");
             exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-          
+        }
+
+        if (!exchange.getRequest().getHeaders().containsKey("AUTH-TOKEN")) {
+            log.error("RETURN UNAUTHORIZED ");
+            exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
         }
 
         return chain.filter(exchange);

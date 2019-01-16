@@ -42,7 +42,7 @@ public class WikiController {
 
     @GetMapping("/wiki/test")
     public ResponseEntity<?> test() {
-        log.info("TEST CALLED????");
+        log.info("Hmmm");
         return ResponseEntity.ok().body("HALLO");
     }
 

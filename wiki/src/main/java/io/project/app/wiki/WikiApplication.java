@@ -7,12 +7,12 @@ import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.config.EnableWebFlux;
 
 @SpringBootApplication
 @ComponentScan(basePackages = {"io.project"})
@@ -20,6 +20,7 @@ import org.springframework.web.client.RestTemplate;
 @EnableMongoRepositories("io.project.app.repositories")
 @EnableDiscoveryClient
 @EnableEurekaClient
+@EnableWebFlux
 public class WikiApplication {
 
     public static void main(String[] args) {
