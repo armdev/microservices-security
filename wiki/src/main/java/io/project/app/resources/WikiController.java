@@ -41,16 +41,16 @@ public class WikiController {
     @Autowired
     private AuthService authService;
 
-    @GetMapping(value = "/all")
-    public Flux<String> all() {
-        return Flux.just("One ", "Two");
-    }
-
-    @GetMapping("/wiki/test")
-    public ResponseEntity<?> test() {
-        log.info("Hmmm");
-        return ResponseEntity.ok().body("HALLO");
-    }
+//    @GetMapping(value = "/all")
+//    public Flux<String> all() {
+//        return Flux.just("One ", "Two");
+//    }
+//
+//    @GetMapping("/wiki/test")
+//    public ResponseEntity<?> test() {
+//        log.info("Hmmm");
+//        return ResponseEntity.ok().body("HALLO");
+//    }
 
     @PostMapping(path = "/wiki", produces = "application/json;charset=UTF-8")
     @CrossOrigin
