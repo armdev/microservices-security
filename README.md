@@ -36,6 +36,10 @@ http://localhost:5002/swagger-ui.html
 
 http://localhost:5003/swagger-ui.html
 
+# wiki
+
+http://localhost:5004/swagger-ui.html
+
 # phpmyadmin
 
 http://localhost:9191 (root:root)
