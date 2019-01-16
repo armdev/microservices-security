@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -39,6 +40,11 @@ public class WikiController {
 
     @Autowired
     private AuthService authService;
+
+    @GetMapping(value = "/all")
+    public Flux<String> all() {
+        return Flux.just("One ", "Two");
+    }
 
     @GetMapping("/wiki/test")
     public ResponseEntity<?> test() {
