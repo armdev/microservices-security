@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,6 +50,47 @@ public class BrowserController {
     @CrossOrigin
     public ResponseEntity<?> publish(@RequestBody User user) {
         log.info("Publish STARTING THE REQUEST");
+        user.setEmail(System.currentTimeMillis() + "@gmail.com");
+        Integer registeredUserStatus = browserService.userRegistration(user);
+
+        if (registeredUserStatus == 200) {
+            log.info("publish User registered we can try to login");
+            User userLogin = browserService.userLogin(new Login(user.getEmail(), user.getPassword()));
+            if (userLogin.getId() != null) {
+                log.info("User id is present, so we are logged in");
+                String userLoginReturnToken = browserService.userLoginReturnToken(new Login(user.getEmail(), user.getPassword()));
+                Wiki wiki = new Wiki();
+                wiki.setTitle("New Article");
+                wiki.setContent("Pure content");
+                wiki.setHeader("Hot news");
+                wiki.setUserId(userLogin.getId());
+                wiki.setPublishDate(new Date(System.currentTimeMillis()));
+                String postWiki = browserService.postWiki(wiki, userLoginReturnToken);
+                if (postWiki != null) {
+                    return ResponseEntity.ok().body(userLogin);
+                }
+
+            } else {
+                return ResponseEntity.badRequest().body(new ResponseMessage("Could not login user"));
+            }
+        }
+
+        return ResponseEntity.badRequest().body(new ResponseMessage("Could not publish wiki"));
+
+    }
+    
+    // ab -n 100 -c 10 http://localhost:5002/api/v2/browser/publish/wiki/more
+
+    @GetMapping(path = "/publish/wiki/more", produces = "application/json;charset=UTF-8")
+    @CrossOrigin
+    public ResponseEntity<?> publishmore() {
+        log.info("Publish STARTING THE REQUEST");
+        User user = new User();
+        user.setEmail(System.currentTimeMillis() + "@gmail.com");
+        user.setFirstname("Name");
+        user.setLastname("Lastname");
+        user.setPassword(System.currentTimeMillis() + "pass");
+
         Integer registeredUserStatus = browserService.userRegistration(user);
 
         if (registeredUserStatus == 200) {

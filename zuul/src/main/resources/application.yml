@@ -51,10 +51,13 @@ spring:
 
 auth:
     ribbon:
-     ReadTimeout: 3000
+     ReadTimeout: 30000
 register:
     ribbon:
-     ReadTimeout: 3000
+     ReadTimeout: 30000
+wiki:
+    ribbon:
+     ReadTimeout: 30000
 
      
 eureka:
