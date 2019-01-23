@@ -204,4 +204,4 @@ services:
 
 networks:
   socnet:
-    driver: bridge
+    driver: overlay
