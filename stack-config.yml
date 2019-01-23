@@ -1,0 +1,207 @@
+version: "3.3"
+
+services:
+    
+  rabbitmq:    
+    image: rabbitmq                 
+    container_name: rabbitmq
+    links:
+     - zipkin
+    volumes:
+     - /opt/rabbitmq/logs/:/opt/rabbitmq/logs
+    ports:
+     - '15672:15672'
+     - '5672:5672'
+    networks:
+     - socnet
+    
+  mongonode:      
+    image: mongonode   
+    volumes:
+      - /opt/mongobingo/data:/data/db
+      - /opt/mongobingo/logs:/data/logs
+    ports:
+      - 27017:27017
+    restart: always
+    environment:
+      - MONGO_INITDB_ROOT_PASSWORD=Abcdf
+      - MONGO_INITDB_ROOT_USERNAME=BingoBongo
+    command: mongod
+    networks:
+      socnet:
+        aliases:
+          - mongonode
+    
+  mysql:
+    image: mysqlnode   
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_USER=admin
+      - MYSQL_PASSWORD=root
+      - MYSQL_DATABASE=zipkin
+    volumes:
+      - /opt/mysql8/logs/:/opt/mysql/logs 
+      - /opt/mysql8/data:/var/lib/mysql    
+    ports:
+      - 3306:3306  
+    networks:
+     - socnet
+     
+       
+  phpmyadmin:
+   image: phpmyadmin   
+   links:
+    - mysql
+   ports:
+     - 9191:80
+   environment:
+     MYSQL_USERNAME: root
+     MYSQL_ROOT_PASSWORD: root
+     PMA_HOST: mysql
+   networks:
+     - socnet
+
+  eureka:
+    image: eureka  
+    ports:
+      - '8761:8761'
+    volumes:
+      - /opt/eureka/logs/:/opt/eureka/logs
+    networks:
+      - socnet
+
+  zuul:
+    image: zuul   
+    links:
+      - eureka
+    depends_on:     
+      - eureka   
+    volumes:
+      - /opt/zuul/logs/:/opt/zuul/logs     
+    ports:
+      - '8079:8079'
+    networks:
+      - socnet
+      
+  zipkin:
+    image: zipkin  
+    links:
+      - eureka    
+    depends_on:     
+      - eureka      
+    volumes:
+      - /opt/zipkin/logs/:/opt/zipkin/logs     
+    ports:
+      - '9411:9411'
+    networks:
+      - socnet
+  
+
+  auth:
+    image: auth   
+    restart: always
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+    links:      
+      - mongonode 
+      - eureka
+    depends_on:     
+      - mongonode
+      - eureka     
+    ports:
+      - '5001:5001'
+    volumes:
+      - /opt/auth/logs/:/opt/auth/logs
+    networks:
+      - socnet
+      
+  browser:
+    image: browser    
+    restart: always
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+    links:     
+      - eureka
+    depends_on:      
+      - eureka     
+    ports:
+      - '5002:5002'
+    volumes:
+      - /opt/browser/logs/:/opt/browser/logs
+    networks:
+      - socnet
+            
+  register:
+    image: register   
+    restart: always
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+    links:      
+      - mongonode 
+      - eureka
+    depends_on:     
+      - mongonode
+      - eureka     
+    ports:
+      - '5003:5003'
+    volumes:
+      - /opt/register/logs/:/opt/register/logs
+    networks:
+      - socnet
+      
+      
+  wiki:
+    image: wiki   
+    restart: always
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+    links:      
+      - mongonode 
+      - eureka
+    depends_on:     
+      - mongonode
+      - eureka     
+    ports:
+      - '5004:5004'
+    volumes:
+      - /opt/wiki/logs/:/opt/wiki/logs
+    networks:
+      - socnet
+  
+   
+
+networks:
+  socnet:
+    driver: bridge
