@@ -22,8 +22,7 @@ server:
     
 spring:
   application:
-    name: auth
-    
+    name: auth    
     
   cloud:
     discovery:
@@ -42,7 +41,7 @@ spring:
     
   data:
     mongodb:           
-      uri: mongodb://BingoBongo:Abcdf@mongonode:27017/userDB?authSource=admin
+      uri: ${MONGO_URI:mongodb://BingoBongo:Abcdf@127.0.0.1:27017/userDB?authSource=admin} 
      
 
 jwt:

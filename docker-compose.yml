@@ -3,7 +3,8 @@ version: "3.3"
 services:
     
   rabbitmq:    
-    image: rabbitmq                 
+    image: rabbitmq
+    env_file: env  
     container_name: rabbitmq
     links:
      - zipkin
@@ -15,12 +16,14 @@ services:
     networks:
      - socnet
     
-  mongonode:      
+  mongonode:  
+    image: mongonode    
     build: ./mongonode
+    env_file: env
     container_name: mongonode    
     volumes:
-      - /opt/mongobingo/data:/data/db
-      - /opt/mongobingo/logs:/data/logs
+      - /opt/mongodata/data:/data/db
+      - /opt/mongodata/logs:/data/logs
     ports:
       - 27017:27017
     restart: always
@@ -35,6 +38,7 @@ services:
     
   mysql:
     image: mysqlnode
+    env_file: env
     build: ./mysqlnode
     container_name: "mysql"
     environment:
@@ -43,8 +47,8 @@ services:
       - MYSQL_PASSWORD=root
       - MYSQL_DATABASE=zipkin
     volumes:
-      - /opt/mysql8/logs/:/opt/mysql/logs 
-      - /opt/mysql8/data:/var/lib/mysql    
+      - /opt/mysqldata/logs/:/opt/mysql/logs 
+      - /opt/mysqldata/data:/var/lib/mysql    
     ports:
       - 3306:3306  
     networks:
@@ -53,6 +57,7 @@ services:
        
   phpmyadmin:
    image: phpmyadmin/phpmyadmin
+   env_file: env
    container_name: "phpmyadmin"
    links:
     - mysql
@@ -66,7 +71,8 @@ services:
      - socnet
 
   eureka:
-    image: eureka   
+    image: eureka
+    env_file: env
     build: ./eureka
     container_name: eureka   
     ports:
@@ -77,7 +83,8 @@ services:
       - socnet
 
   zuul:
-    image: zuul    
+    image: zuul
+    env_file: env
     build: ./zuul
     container_name: zuul
     links:
@@ -92,13 +99,16 @@ services:
       - socnet
       
   zipkin:
-    image: zipkin    
+    image: zipkin
+    env_file: env
     build: ./zipkin
     container_name: zipkin
     links:
-      - eureka    
+      - eureka
+      - mysql    
     depends_on:     
-      - eureka      
+      - eureka
+      - mysql          
     volumes:
       - /opt/zipkin/logs/:/opt/zipkin/logs     
     ports:
@@ -108,7 +118,8 @@ services:
   
 
   auth:
-    image: auth   
+    image: auth
+    env_file: env
     build: ./auth
     container_name: auth
     restart: always
@@ -136,7 +147,8 @@ services:
       - socnet
       
   browser:
-    image: browser   
+    image: browser
+    env_file: env
     build: ./browser
     container_name: browser
     restart: always
@@ -163,7 +175,8 @@ services:
       
       
   register:
-    image: register   
+    image: register 
+    env_file: env
     build: ./register
     container_name: register
     restart: always
@@ -192,7 +205,8 @@ services:
       
       
   wiki:
-    image: wiki   
+    image: wiki
+    env_file: env
     build: ./wiki
     container_name: wiki
     restart: always
@@ -217,9 +231,7 @@ services:
     volumes:
       - /opt/wiki/logs/:/opt/wiki/logs
     networks:
-      - socnet
-  
-   
+      - socnet   
 
 networks:
   socnet:

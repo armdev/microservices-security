@@ -3,8 +3,23 @@ version: "3.3"
 services:
     
   rabbitmq:    
-    image: rabbitmq                 
+    image: rabbitmq
+    env_file: env
     container_name: rabbitmq
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: '1024mb'
+        reservations:
+          cpus: '0.1'
+          memory: '250mb' 
     links:
      - zipkin
     volumes:
@@ -15,11 +30,26 @@ services:
     networks:
      - socnet
     
-  mongonode:      
-    image: mongonode   
+  mongonode:
+    env_file: env
+    image: mongonode
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: '4096mb'
+        reservations:
+          cpus: '0.1'
+          memory: '250mb' 
     volumes:
-      - /opt/mongobingo/data:/data/db
-      - /opt/mongobingo/logs:/data/logs
+      - /opt/mongodata/data:/data/db
+      - /opt/mongodata/logs:/data/logs
     ports:
       - 27017:27017
     restart: always
@@ -33,15 +63,30 @@ services:
           - mongonode
     
   mysql:
-    image: mysqlnode   
+    env_file: env
+    image: mysqlnode
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: '4096mb'
+        reservations:
+          cpus: '0.1'
+          memory: '250mb'   
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_USER=admin
       - MYSQL_PASSWORD=root
       - MYSQL_DATABASE=zipkin
     volumes:
-      - /opt/mysql8/logs/:/opt/mysql/logs 
-      - /opt/mysql8/data:/var/lib/mysql    
+      - /opt/mysqldata/logs/:/opt/mysql/logs 
+      - /opt/mysqldata/data:/var/lib/mysql    
     ports:
       - 3306:3306  
     networks:
@@ -49,7 +94,22 @@ services:
      
        
   phpmyadmin:
-   image: phpmyadmin   
+   env_file: env    
+   image: phpmyadmin/phpmyadmin
+   deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: '2048mb'
+        reservations:
+          cpus: '0.1'
+          memory: '250mb' 
    links:
     - mysql
    ports:
@@ -62,6 +122,21 @@ services:
      - socnet
 
   eureka:
+    env_file: env
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: '1024mb'
+        reservations:
+          cpus: '0.1'
+          memory: '250mb' 
     image: eureka  
     ports:
       - '8761:8761'
@@ -71,7 +146,22 @@ services:
       - socnet
 
   zuul:
-    image: zuul   
+    image: zuul
+    env_file: env
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: '2048mb'
+        reservations:
+          cpus: '0.1'
+          memory: '250mb' 
     links:
       - eureka
     depends_on:     
@@ -84,11 +174,28 @@ services:
       - socnet
       
   zipkin:
-    image: zipkin  
+    image: zipkin
+    env_file: env
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: '2048mb'
+        reservations:
+          cpus: '0.1'
+          memory: '250mb' 
     links:
-      - eureka    
+      - eureka
+      - mysql    
     depends_on:     
       - eureka      
+      - mysql
     volumes:
       - /opt/zipkin/logs/:/opt/zipkin/logs     
     ports:
@@ -98,8 +205,23 @@ services:
   
 
   auth:
-    image: auth   
+    image: auth
+    env_file: env
     restart: always
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: '1024mb'
+        reservations:
+          cpus: '0.1'
+          memory: '250mb' 
     logging:
       options:
         max-size: "10m"
@@ -124,18 +246,27 @@ services:
       - socnet
       
   browser:
-    image: browser    
+    image: browser
+    env_file: env
     restart: always
-    logging:
-      options:
-        max-size: "10m"
-        max-file: "10"
     deploy:
+      replicas: 1
       restart_policy:
         condition: on-failure
         delay: 5s
         max_attempts: 3
         window: 120s
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: '1024mb'
+        reservations:
+          cpus: '0.1'
+          memory: '250mb' 
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"      
     links:     
       - eureka
     depends_on:      
@@ -148,18 +279,27 @@ services:
       - socnet
             
   register:
-    image: register   
+    image: register
+    env_file: env
     restart: always
     logging:
       options:
         max-size: "10m"
         max-file: "10"
     deploy:
+      replicas: 1
       restart_policy:
         condition: on-failure
         delay: 5s
         max_attempts: 3
         window: 120s
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: '1024mb'
+        reservations:
+          cpus: '0.1'
+          memory: '250mb' 
     links:      
       - mongonode 
       - eureka
@@ -175,18 +315,27 @@ services:
       
       
   wiki:
-    image: wiki   
+    image: wiki
+    env_file: env
     restart: always
     logging:
       options:
         max-size: "10m"
         max-file: "10"
     deploy:
+      replicas: 1
       restart_policy:
         condition: on-failure
         delay: 5s
         max_attempts: 3
         window: 120s
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: '1024mb'
+        reservations:
+          cpus: '0.1'
+          memory: '250mb' 
     links:      
       - mongonode 
       - eureka
@@ -198,8 +347,7 @@ services:
     volumes:
       - /opt/wiki/logs/:/opt/wiki/logs
     networks:
-      - socnet
-  
+      - socnet 
    
 
 networks:

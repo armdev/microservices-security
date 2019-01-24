@@ -1,0 +1,15 @@
+########
+# CLOUD RESOURCES
+########
+
+CONFIG_URI=http://confignode:8888
+ZIPKIN_URI=http://zipkinnode:9411
+EUREKA_URI=http://eureka:8761/eureka  
+
+########
+# MONGODB
+########
+MONGO_URI=mongodb://BingoBongo:Abcdf@192.168.1.241:27017/userDB?authSource=admin
+MONGO_WIKI_URI=mongodb://BingoBongo:Abcdf@192.168.1.241:27017/wikiDB?authSource=admin
+MYSQL_URI=jdbc:mysql://192.168.1.241:3306/zipkin?autoReconnect=true
+

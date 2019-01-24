@@ -42,8 +42,8 @@ spring:
     percentage: 1 
     
   data:
-    mongodb:           
-      uri: mongodb://BingoBongo:Abcdf@mongonode:27017/wikiDB?authSource=admin
+    mongodb:
+      uri: ${MONGO_WIKI_URI:mongodb://BingoBongo:Abcdf@127.0.0.1:27017/wikiDB?authSource=admin} 
      
 
 jwt:
