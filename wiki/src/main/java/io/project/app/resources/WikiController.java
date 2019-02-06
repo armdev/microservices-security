@@ -48,7 +48,6 @@ public class WikiController {
 //        log.info("Hmmm");
 //        return ResponseEntity.ok().body("HALLO");
 //    }
-
     @PostMapping(path = "/wiki", produces = "application/json;charset=UTF-8")
     @CrossOrigin
     public ResponseEntity<?> post(@RequestBody Wiki wiki,
@@ -65,7 +64,8 @@ public class WikiController {
         log.info("forwardedPrefix  " + forwardedPrefix);
         log.info("host  " + host);
 
-        //  log.info("Zuul Token " + zuulToken);
+        log.info("Zuul Token " + zuulToken);
+        log.info("AuthToken " + authToken);
         Boolean authTokenValidation = tokenProvider.validateToken(authToken);
 
         if (!authTokenValidation) {
@@ -80,6 +80,7 @@ public class WikiController {
 
         Claims allClaimsFromToken = tokenProvider.getAllClaimsFromToken(authToken);
         if (allClaimsFromToken != null && allClaimsFromToken.getSubject() != null) {
+            
             Try<String> verifyUser = authService.verifyUser(allClaimsFromToken.getSubject());
 
             if (verifyUser.isSuccess()) {
@@ -89,7 +90,7 @@ public class WikiController {
 
             if (verifyUser.isFailure()) {
                 log.error("User verify by email is failed");
-                return ResponseEntity.badRequest().body(new ResponseMessage("Could not add wiki"));
+                return ResponseEntity.badRequest().body(new ResponseMessage("Could not add wiki, bad request"));
             }
 
         }
@@ -102,7 +103,7 @@ public class WikiController {
         }
 
         if (!addedWiki.isPresent()) {
-            return ResponseEntity.badRequest().body(new ResponseMessage("Could not add wiki"));
+            return ResponseEntity.badRequest().body(new ResponseMessage("Could not add wiki, some error"));
         }
 
         return ResponseEntity.badRequest().build();

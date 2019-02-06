@@ -1,6 +1,5 @@
 package io.project.app.services;
 
-
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 
 import io.project.app.dto.Claim;
@@ -32,17 +31,25 @@ public class AuthService {
             log.error("LABEL: Fail " + token);
             return Try.failure(col.getCause());
         }
-         if (col.isSuccess()) {
+        if (col.isSuccess()) {
             log.info("TOKEN CHECK IS  SUCCESS ");
-           
+
         }
         return col;
     }
 
     public Try<Claim> verifyTokenBackup(String token) {
-        log.info("LABEL: verifyTokenBackup:  AUTH SERVICE IS DOWN  " + token);
-        log.info("LABEL: verifyTokenBackup:  Get claim: verifyTokenBackup  " + token);        // Handle exception and invoke fallback
-        return Try.failure(null);
+        log.info("LABEL: VerifyToken: with passed token " + token);
+        Try<Claim> col = Try.of(() -> restTemplate.getForObject("http://auth:5001/api/v2/tokens/verify/{token}", Claim.class, token));
+        if (!col.isSuccess()) {
+            log.error("LABEL: Fail " + token);
+            return Try.failure(col.getCause());
+        }
+        if (col.isSuccess()) {
+            log.info("TOKEN CHECK IS  SUCCESS ");
+
+        }
+        return col;
     }
 
 }

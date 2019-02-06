@@ -52,14 +52,16 @@ jwt:
     zuulSecret: zuulSecret2025
     
 eureka:
-  instance:  
+  instance:
+    hostname: auth  
     leaseRenewalIntervalInSeconds: 10
     prefer-ip-address: true
     leaseExpirationDurationInSeconds: 3
   client:
+    hostname: auth   
     enabled: true
     registryFetchIntervalSeconds: 5   
     healthcheck:
       enabled: true
     serviceUrl:
-      defaultZone:defaultZone: ${EUREKA_URI:http://mpOwner:mp19181975Secret@eureka:8761/eureka}
+      defaultZone: ${EUREKA_URI:http://mpOwner:mp19181975Secret@eureka:8761/eureka}
