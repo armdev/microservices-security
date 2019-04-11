@@ -36,11 +36,10 @@ services:
         aliases:
           - mongonode
     
-  mysql:
-    image: mysqlnode
-    env_file: env
+  mysqlnode:
+    image: mysqlnode  
     build: ./mysqlnode
-    container_name: "mysql"
+    container_name: "mysqlnode"
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_USER=admin
@@ -60,7 +59,7 @@ services:
    env_file: env
    container_name: "phpmyadmin"
    links:
-    - mysql
+    - mysqlnode
    ports:
      - 9191:80
    environment:
@@ -105,10 +104,10 @@ services:
     container_name: zipkin
     links:
       - eureka
-      - mysql    
+      - mysqlnode    
     depends_on:     
       - eureka
-      - mysql          
+      - mysqlnode          
     volumes:
       - /opt/zipkin/logs/:/opt/zipkin/logs     
     ports:

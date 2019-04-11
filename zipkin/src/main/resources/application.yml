@@ -10,10 +10,10 @@ spring:
     host: rabbitmq
   datasource:
     schema: classpath:/mysql.sql    
-    url: ${MYSQL_URI:jdbc:mysql://127.0.0.1:3306/zipkin?autoReconnect=true} 
+    url: ${MYSQL_URI:jdbc:mysql://mysqlnode:3306/zipkin?autoReconnect=true} 
    # driver-class-name: com.mysql.cj.jdbc.Driver
     driver-class-name: com.mysql.jdbc.Driver
-    username: root
+    username: admin
     password: root
     initialize: true
     continue-on-error: true
