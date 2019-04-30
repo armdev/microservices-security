@@ -3,8 +3,7 @@ version: "3.3"
 services:
     
   rabbitmq:    
-    image: rabbitmq
-    env_file: env  
+    image: rabbitmq    
     container_name: rabbitmq
     links:
      - zipkin
@@ -18,12 +17,11 @@ services:
     
   mongonode:  
     image: mongonode    
-    build: ./mongonode
-    env_file: env
+    build: ./mongonode   
     container_name: mongonode    
     volumes:
-      - /opt/mongodata/data:/data/db
-      - /opt/mongodata/logs:/data/logs
+      - /opt/mongobingo/data:/data/db
+      - /opt/mongobingo/logs:/data/logs
     ports:
       - 27017:27017
     restart: always
@@ -55,8 +53,7 @@ services:
      
        
   phpmyadmin:
-   image: phpmyadmin/phpmyadmin
-   env_file: env
+   image: phpmyadmin/phpmyadmin  
    container_name: "phpmyadmin"
    links:
     - mysqlnode
@@ -70,8 +67,7 @@ services:
      - socnet
 
   eureka:
-    image: eureka
-    env_file: env
+    image: eureka   
     build: ./eureka
     container_name: eureka   
     ports:
@@ -82,8 +78,7 @@ services:
       - socnet
 
   zuul:
-    image: zuul
-    env_file: env
+    image: zuul   
     build: ./zuul
     container_name: zuul
     links:
@@ -98,8 +93,7 @@ services:
       - socnet
       
   zipkin:
-    image: zipkin
-    env_file: env
+    image: zipkin   
     build: ./zipkin
     container_name: zipkin
     links:
@@ -117,8 +111,7 @@ services:
   
 
   auth:
-    image: auth
-    env_file: env
+    image: auth  
     build: ./auth
     container_name: auth
     restart: always
@@ -146,8 +139,7 @@ services:
       - socnet
       
   browser:
-    image: browser
-    env_file: env
+    image: browser   
     build: ./browser
     container_name: browser
     restart: always
@@ -174,8 +166,7 @@ services:
       
       
   register:
-    image: register 
-    env_file: env
+    image: register    
     build: ./register
     container_name: register
     restart: always
@@ -204,8 +195,7 @@ services:
       
       
   wiki:
-    image: wiki
-    env_file: env
+    image: wiki    
     build: ./wiki
     container_name: wiki
     restart: always

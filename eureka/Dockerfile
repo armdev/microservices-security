@@ -1,4 +1,4 @@
-FROM openjdk:10-jdk
+FROM amazoncorretto:8
 VOLUME /tmp
 ADD target/eureka.jar /app.jar
 RUN bash -c 'touch /app.jar'

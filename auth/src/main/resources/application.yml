@@ -37,11 +37,12 @@ spring:
     http:
       enabled: true   
     sampler:
-    percentage: 1 
-    
+    percentage: 1     
+
   data:
-    mongodb:           
-      uri: ${MONGO_URI:mongodb://BingoBongo:Abcdf@127.0.0.1:27017/userDB?authSource=admin} 
+    mongodb:       
+       uri: mongodb://BingoBongo:Abcdf@mongonode:27017/userDB?ssl=false&connectTimeoutMS=300000&minPoolSize=0&maxPoolSize=100&maxIdleTimeMS=900000&authSource=admin
+        
      
 
 jwt:

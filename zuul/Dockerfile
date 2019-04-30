@@ -1,4 +1,4 @@
-FROM openjdk:11-jdk-slim
+FROM amazoncorretto:8
 ADD target/zuul.jar app.jar
 VOLUME /tmp
 VOLUME /target

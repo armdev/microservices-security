@@ -41,9 +41,11 @@ spring:
     sampler:
     percentage: 1 
     
+
   data:
-    mongodb:
-      uri: ${MONGO_WIKI_URI:mongodb://BingoBongo:Abcdf@127.0.0.1:27017/wikiDB?authSource=admin} 
+    mongodb:       
+       uri: mongodb://BingoBongo:Abcdf@mongonode:27017/wikiDB?ssl=false&connectTimeoutMS=300000&minPoolSize=0&maxPoolSize=100&maxIdleTimeMS=900000&authSource=admin
+        
      
 
 jwt:

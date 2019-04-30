@@ -13,7 +13,7 @@ spring:
     url: ${MYSQL_URI:jdbc:mysql://mysqlnode:3306/zipkin?autoReconnect=true} 
    # driver-class-name: com.mysql.cj.jdbc.Driver
     driver-class-name: com.mysql.jdbc.Driver
-    username: admin
+    username: root
     password: root
     initialize: true
     continue-on-error: true
