@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>io.project.app</groupId>
-    <artifactId>eureka</artifactId>
+    <artifactId>eureka1</artifactId>
     <version>1.0</version>
-    <name>eureka</name>
-    <description>eureka</description>
+    <name>eureka1</name>
+    <description>eureka1</description>
 
     <properties>
         <java.version>1.8</java.version>
@@ -92,7 +92,7 @@
     </dependencyManagement>
 
     <build>
-        <finalName>eureka</finalName>
+        <finalName>eureka1</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

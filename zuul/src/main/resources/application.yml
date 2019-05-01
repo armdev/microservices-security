@@ -10,13 +10,13 @@ zuul:
   routes:
     auth:
       path: /auth/**
-      url: http://auth:5001 
+      serviceId: auth
     register:
       path: /register/**
-      url: http://register:5003
+      serviceId: register
     wiki:
       path: /wiki/**
-      url: http://wiki:5004  
+      serviceId: wiki
     
 
 server:
@@ -59,6 +59,9 @@ wiki:
     ribbon:
      ReadTimeout: 30000
 
+ribbon:
+  eureka:
+     enabled: true
      
 eureka:
   instance:  
@@ -71,5 +74,6 @@ eureka:
     healthcheck:
       enabled: true
     serviceUrl:
-      defaultZone: ${EUREKA_URI:http://mpOwner:mp19181975Secret@eureka:8761/eureka}
+     # defaultZone: ${EUREKA_URI:http://mpOwner:mp19181975Secret@eureka:8761/eureka}
+      defaultZone: http://eureka:8761/eureka, http://eureka1:8762/eureka
 

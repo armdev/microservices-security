@@ -7,6 +7,7 @@
     <packaging>pom</packaging>
     <modules>        
         <module>eureka</module>
+        <module>eureka1</module>
         <module>auth</module>
         <module>zuul</module>
         <module>zipkin</module>	

@@ -29,10 +29,27 @@ logging:
     ROOT: INFO
 
 eureka:
-  client:
-    serviceUrl:
-      defaultZone: ${EUREKA_URI:http://mpOwner:mp19181975Secret@eureka:8761/eureka}
   instance:
-    statusPageUrlPath: /info
-    healthCheckUrlPath: /health
-    instanceId: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+    hostname: zipkin  
+    leaseRenewalIntervalInSeconds: 10
+    prefer-ip-address: true
+    leaseExpirationDurationInSeconds: 3
+  client:
+    hostname: zipkin   
+    enabled: true
+    registryFetchIntervalSeconds: 5   
+    healthcheck:
+      enabled: true
+    serviceUrl:
+      #defaultZone: http://mpOwner:mp19181975Secret@eureka:8761/eureka, http://mpOwner:mp19181975Secret@eureka:8762/eureka
+      defaultZone: http://eureka:8761/eureka, http://eureka1:8762/eureka
+
+
+#eureka:
+#  client:
+#    serviceUrl:
+#      defaultZone: http://eureka:8761/eureka, http://eureka1:8762/eureka
+#  instance:
+#    statusPageUrlPath: /info
+#    healthCheckUrlPath: /health
+#    instanceId: ${spring.application.name}:${spring.application.instance_id:${random.value}}

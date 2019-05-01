@@ -12,7 +12,7 @@ spring:
     name: eureka
 
 server:
-  port: 8761
+  port: 8762
 
 eureka:
   instance:  
@@ -28,6 +28,6 @@ eureka:
       enabled: true
     serviceUrl:
       #defaultZone: http://mpOwner:mp19181975Secret@eureka:8761/eureka, http://mpOwner:mp19181975Secret@eureka:8762/eureka
-      defaultZone: http://eureka:8761/eureka, http://eureka1:8762/eureka
+      defaultZone: http://eureka1:8762/eureka
 
   

@@ -76,6 +76,17 @@ services:
       - /opt/eureka/logs/:/opt/eureka/logs
     networks:
       - socnet
+      
+  eureka1:
+    image: eureka1   
+    build: ./eureka1
+    container_name: eureka1   
+    ports:
+      - '8762:8762'
+    volumes:
+      - /opt/eureka1/logs/:/opt/eureka1/logs
+    networks:
+      - socnet
 
   zuul:
     image: zuul   
