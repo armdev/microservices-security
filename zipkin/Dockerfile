@@ -1,4 +1,5 @@
 FROM amazoncorretto:8
+#FROM fabric8/java-alpine-openjdk8-jdk:1.6.2
 ADD target/zipkin.jar app.jar
 VOLUME /tmp
 VOLUME /target
